@@ -1,32 +1,34 @@
-package version3Projet;
+package LastVersion;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Moteur {
 	Matrice m;
-	ArrayList<Double> vecteur;
+	List<Double> vecteur;
 	Double alpha = 0.85;
 
-	Moteur(Matrice m, ArrayList<Double> v){
+	Moteur(Matrice m, List<Double> v){
 		this.m = m;
 		this.vecteur = v;
 	}
 
 
-	public ArrayList<Double> multiplication(ArrayList<Double> pi, ArrayList<Double> F, ArrayList<Integer> indiceD/*, ArrayList<Integer> indiceF*/) {
-		//ArrayList<Double> pi = this.vecteur;
+	public List<Double> multiplication(List<Double> pi, List<Double> F, List<Integer> indiceD/*, List<Integer> indiceF*/) {
+		//List<Double> pi = this.vecteur;
 		Matrice m = this.m;
 
 		//System.out.println(m.in.size());
-		ArrayList<Double> res = new ArrayList<Double>(m.dimension+1);
-		//ArrayList<Integer> e = new ArrayList<Integer>(Collections.nCopies(m.dimension+1, 1));
+		List<Double> res = new ArrayList<Double>(m.dimension+1);
+		//List<Integer> e = new List<Integer>(Collections.nCopies(m.dimension+1, 1));
 		int i = 0;
 		int j = 0;
+		double D = calcDelta(F, pi);
 		while(i  < m.dimension){  //parcours colonnes m i = num colonne
 			//System.out.println("i"+i);
 			double tmp = 0.0;
-			double D = calcDelta(F, pi);
+			
 			if(i+1 < m.dimension) {
 				for(j = indiceD.get(i); j < indiceD.get(i+1) && i < m.in.size(); j++){ //parcours les valeurs dans la colonne 
 					//System.out.println("j"+j);
@@ -50,15 +52,15 @@ public class Moteur {
 			}
 			res.add(i, tmp + ( (1-alpha)/m.dimension) + (D)/m.dimension); //ajout alpha
 			//System.out.println(res);
-			if(i%1000==0) {
+			/*if(i%1000==0) {
 				System.out.print("\r"+i);
-				}
+			}*/
 			i++;			
 		}
-		return res;
+		return res; //Return Pik+1
 	}
 
-	public static double normeInf(ArrayList<Double> v1, ArrayList<Double> v2) {
+	public static double normeInf(List<Double> v1, List<Double> v2) {
 		double tmp=0.0;
 		for(int i = 0; i < v1.size(); i++) {
 			double res = Math.abs((v1.get(i))-v2.get(i));
@@ -68,10 +70,10 @@ public class Moteur {
 		}
 		return tmp;
 	}
-	
+
 	//a = indice des lignes nulles 
-	public static ArrayList<Double> createF(ArrayList<Integer> a, Matrice m){
-		ArrayList<Double> F = new ArrayList<Double>(Collections.nCopies(m.dimension, 0.0));
+	public static List<Double> createF(List<Integer> a, Matrice m){
+		List<Double> F = new ArrayList<Double>(Collections.nCopies(m.dimension, 0.0));
 		for (Integer i : a){
 			F.set(i-1, 1.0);
 		}
@@ -79,14 +81,30 @@ public class Moteur {
 		//System.out.println("VectF : " +F);
 		return F;
 	}
-	
+
 	//a = F d = Pi retourne Delta
-	public Double calcDelta(ArrayList<Double> a, ArrayList<Double> d){
+	public Double calcDelta(List<Double> a, List<Double> d){
 		double res = 0.0;
-		for (int i =0; i < a.size(); i++){
+		int borne = a.size();
+		for (int i =0; i < m.dimension; i++){
 			res += a.get(i) * d.get(i);
 		}
 		return res*alpha;
+		/*double res = 0.0;
+		System.out.println("ver");
+		if(a.size()%2==0)
+			for (int i =1; i < a.size(); i=i+2){
+				res += a.get(i-1) * d.get(i-1);
+				res += a.get(i) * d.get(i);
+			}
+		else {
+			for (int i =1; i < a.size(); i=i+2){
+				res += a.get(i-1) * d.get(i-1);
+				res += a.get(i) * d.get(i);
+			}
+			res += a.get(a.size()-1) * d.get(a.size()-1);
+		}	
+		return res*alpha;*/
 	}
 
 }

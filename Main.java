@@ -1,8 +1,9 @@
-package version3Projet;
+package LastVersion;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,19 +17,20 @@ class Main
     	//variables 
         String line;
         double epsilon = Math.pow(10, -6); //ESSAYER DE DIMINIUER
-        ArrayList<Double> pi0 = new ArrayList<Double>();
-        ArrayList<Double> pi1 = new ArrayList<Double>();
-        ArrayList<Double> e = new ArrayList<Double>();
+        List<Double> pi0 = new ArrayList<Double>();
+        List<Double> pi1 = new ArrayList<Double>();
+        List<Double> e = new ArrayList<Double>();
         int m; //nb non nul
         int j, n = 0; //n : dimension de la matrice
-        ArrayList<String> tabi = new ArrayList<String>(); //tableau ligne
-        ArrayList<String> tabj = new ArrayList<String>(); //tableau colonne
-        ArrayList<String> tabv = new ArrayList<String>(); //tableau valeur
-        ArrayList<String> stringl = new ArrayList<String>(); //tableau de la ligne
-        ArrayList<Integer> tabnull = new ArrayList<Integer>(); //tableau des lignes avec degrÃ© 0
+        List<String> tabi = new ArrayList<String>(); //tableau ligne
+        List<String> tabj = new ArrayList<String>(); //tableau colonne
+        List<String> tabv = new ArrayList<String>(); //tableau valeur
+        List<String> stringl = new ArrayList<String>(); //tableau de la ligne
+        List<Integer> tabnull = new ArrayList<Integer>(); //tableau des lignes avec degrÃ© 0
         
         //loader
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Emmanuel\\eclipse-workspace\\PageRank\\src\\version3Projet\\Stanford.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(
+        		"C:\\Users\\Emmanuel\\git\\PageRank\\src\\LastVersion\\Stanford_BerkeleyV2.txt"))) {
             for (int i = 0; i < 1; i++) { //def n
             	n = Integer.parseInt(br.readLine().replaceAll(" ",""));
                 e = new ArrayList<Double>(Collections.nCopies(n, 1.0));//initialisation e
@@ -43,7 +45,7 @@ class Main
             int i;
             for (i = 0; i < n; i++) { //parcours txt
                 line = br.readLine();
-                stringl = new ArrayList<String>(Arrays.asList(line.split(" ")));
+                stringl = new ArrayList<String>(Arrays.asList(line.replaceAll("  ", " ").split(" ")));
                 String indice=stringl.get(0);
                 if (Integer.parseInt(stringl.get(1)) == 0){
                     tabnull.add(Integer.parseInt(indice));
@@ -68,13 +70,29 @@ class Main
             br.close();
             
             System.out.println("fin read");
+            System.out.println("taille tabi : "+tabi.size());
+            System.out.println("nb elem non nul : "+m);
+            System.out.println(tabi.get(816022));
+            System.out.println(tabj.get(816022));
+            System.out.println(tabv.get(816022));
+            System.out.println(tabj.get(816023));
+            System.out.println(tabv.get(816023));
+            System.out.println(tabi.get(816023));
+
             
-            ArrayList<element> listEl = new ArrayList<element>();
+            List<element> listEl = new ArrayList<element>();
             for (i=0;i<m;i++){        	
             	int i1 = Integer.parseInt(tabi.get(i)); //crï¿½ation liste d'ï¿½lï¿½ment de la matrice
                 int j1 = Integer.parseInt(tabj.get(i));
                 double v1 = Double.parseDouble(tabv.get(i));
                 listEl.add(new element(i1,j1,v1));
+                /*double init = 1.0/n;
+                double zero = 0.0;
+                pi0.add(init); // initialisation pi0
+                pi1.add(zero); //init pi1*/
+            }
+            
+            for (i=0;i<n;i++){        	
                 double init = 1.0/n;
                 double zero = 0.0;
                 pi0.add(init); // initialisation pi0
@@ -88,21 +106,23 @@ class Main
             
             //m1.print();
             
-            ArrayList<Integer> listeD = m1.tableauIndiceColonneD();
+            List<Integer> listeD = m1.tableauIndiceColonneD();
             
             System.out.println("fin tabIndiceD");
-            //ArrayList<Integer> listeF = m1.tableauIndiceColonneF();
+            //List<Integer> listeF = m1.tableauIndiceColonneF();
             
             //System.out.println("D : " + listeD);
             //System.out.println("F : " +listeF);
             //System.out.println(pi);      
             //System.out.println(listEl);     
             Moteur mot = new Moteur(m1, pi0);
-            ArrayList<Double> F = Moteur.createF(tabnull,m1);
+            List<Double> F = Moteur.createF(tabnull,m1);
+            //System.out.println(F);
             
             System.out.println("fin createF");
-            
-            //ArrayList<Double> pi1 = mot.multiplication(listeD, listeF);
+            System.out.println("taille F : " +F.size());
+            System.out.println("taille pi0 : " +pi0.size());
+            //List<Double> pi1 = mot.multiplication(listeD, listeF);
             //pi1 = mot.multiplication(pi0, listeD, listeF);
             //System.out.println(pi1);
             //System.out.println(Moteur.normeInf(pi1));
@@ -113,8 +133,8 @@ class Main
             
             long startTime1 = System.nanoTime();
             System.out.println("Début convergence");
-            //System.out.println("taille D" +listeD.size());
-            //System.out.println("taille M" +m1.dimension);
+            System.out.println("taille D" +listeD.size());
+            System.out.println("taille M" +m1.dimension);
             //System.out.println(listeD);
             //System.out.println(listeD.get(281730));
            
@@ -123,7 +143,7 @@ class Main
             	pi1 = mot.multiplication(pi0, F, listeD/*, listeF*/);           
                 long endTime = System.nanoTime();
                 long elapsedTime = endTime - startTime;
-                System.out.println("\nItération pi1 " + count + " : " + (double)elapsedTime/ 1000000000.0 + " seconds");
+                //System.out.println("\nItération pi1 " + count + " : " + (double)elapsedTime/ 1000000000.0 + " seconds");
                 count ++;
                 //long startTime1 = System.nanoTime();
             	ninf = Moteur.normeInf(pi1, pi0);
@@ -133,18 +153,18 @@ class Main
             	pi0 = mot.multiplication(pi1, F, listeD/*, listeF*/);
             	long endTime2 = System.nanoTime();
             	long elapsedTime2 = endTime2 - startTime2;
-                System.out.println("\nItération pi0 " + count + " : " + (double)elapsedTime2/ 1000000000.0 + " seconds");
+                //System.out.println("\nItération pi0 " + count + " : " + (double)elapsedTime2/ 1000000000.0 + " seconds");
                 count ++;
             	//System.out.println(pi1);
             	//System.out.println(pi0);
             	//ninf = Moteur.normeInf(pi1, pi0);
-            	System.out.println("normeInf : " + ninf);
+            	//System.out.println("normeInf : " + ninf);
             }
             long endTime1 = System.nanoTime();
             long elapsedTime1 = endTime1 - startTime1;
             //System.out.println("\nFin convergence " + (endTime1 - startTime1) + " milliseconds");
             
-            System.out.println("Pi1 : " +pi1);
+            //System.out.println("Pi1 : " +pi1);
             double sum = 0;
             for(Double d : pi1)
                 sum += d;

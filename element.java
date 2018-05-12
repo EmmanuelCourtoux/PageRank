@@ -1,4 +1,4 @@
-package version3Projet;
+package LastVersion;
 
 public class element implements Comparable<element>{
 	int i;

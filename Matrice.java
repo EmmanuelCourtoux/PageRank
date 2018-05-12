@@ -1,5 +1,6 @@
-package version3Projet;
+package LastVersion;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,14 +9,14 @@ import java.util.Comparator;
 public class Matrice {
 	int nbElement;
 	int dimension;
-	ArrayList<element> in;	
-	
-	Matrice(int m, int n, ArrayList<element> e){
+	List<element> in;	
+
+	Matrice(int m, int n, List<element> e){
 		this.nbElement = m;
 		this.dimension = n;
 		this.in = e;
 	}
-	
+
 	public void print() {
 		System.out.println("Dimension " + dimension);
 		System.out.println("Nombre d'ï¿½lï¿½ments non nuls " + nbElement);
@@ -24,7 +25,7 @@ public class Matrice {
 		}	
 		System.out.println("End");
 	}
-	
+
 	/*public int countNull(Matrice m){// nb ï¿½lï¿½ment nul
 		int acc = 0;
 		for(element e : m.in) {
@@ -34,42 +35,55 @@ public class Matrice {
 		}
 		return acc;
 	}*/
-	
+
 	public void triColonne() { // tri de la matrice par colonne
 		Collections.sort(this.in);
 	}
-	
-	public ArrayList<Integer> tableauIndiceColonneD() {
-		ArrayList<element> l = this.in;
+
+	public List<Integer> tableauIndiceColonneD() {
+		List<element> l = this.in;
 		element tmp = l.get(0); //premier elem
-		//tmp.print();
-		ArrayList<Integer> res = new ArrayList<Integer>();
-		res.add(tmp.j-1);
-		for (int i=0; i < l.size();i++) {
+		tmp.print();
+		List<Integer> res = new ArrayList<Integer>();
+		if(tmp.j != 1) {
+			for (int i=0; i < tmp.j;i++) {
+				res.add(0);
+			}
+		}
+		else
+			res.add(0);
+		double sum = 0.0; //Nombre de site non connexe
+		//System.out.println(tmp.j);
+		for (int i=1; i < l.size();i++) { //colonne directement suivante
 			if(l.get(i).j == tmp.j+1) {
 				tmp = l.get(i);
 				res.add(i);
 				//System.out.println("IndD : " +i);
 			}
 			if(l.get(i).j > tmp.j) { //remplir indiceD pour les colonnes vide (non connexe)
-				//System.out.println(tmp.j +" "+ l.get(i).j);			
-				int diff = l.get(i).j - tmp.j;
+				System.out.println(tmp.j +" "+ l.get(i).j);	
+				int diff = l.get(i).j - tmp.j; //on ajoute diff fois l'indice de l'élément de début de gap
+
+				sum += diff-1;
+				System.out.println("sum : "+sum);
 				for (int k = 0; k < diff-1; k++) {
 					res.add(i);
 				}
 				tmp = l.get(i);
 				res.add(i);
+				//System.out.println(res);
+				//break;
 				//System.out.println("IndD : " +i);
 			}
 		}
 		//System.out.println(res.size());
 		return res;
 	}
-	
-	/*public ArrayList<Integer> tableauIndiceColonneF() {
-		ArrayList<element> l = this.in;
+
+	/*public List<Integer> tableauIndiceColonneF() {
+		List<element> l = this.in;
 		element tmp = l.get(0);
-		ArrayList<Integer> res = new ArrayList<Integer>();
+		List<Integer> res = new List<Integer>();
 		for (element e : l) {
 			if(e.j == tmp.j) {
 				tmp = e;		
