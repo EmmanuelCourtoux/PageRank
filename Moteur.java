@@ -1,11 +1,11 @@
-package LastVersion;
+package readerUpgrade;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Moteur {
-	Matrice m;
+	static Matrice m;
 	List<Double> vecteur;
 	Double alpha = 0.85;
 
@@ -105,6 +105,33 @@ public class Moteur {
 			res += a.get(a.size()-1) * d.get(a.size()-1);
 		}	
 		return res*alpha;*/
+	}
+	
+	public static void modifGraph(List<Integer> Index, List<Integer> Nulle) {
+		int k = 0;
+		for(int i : Nulle) {
+			k = Index.get(i) - Index.get(i-1); //Nombre de pere du site sans lien de sortie
+			//System.out.println(Index.get(i));
+			//System.out.println("Affichage k:" +k);
+			if(k >= 2) { //Si il y a au moins 2 peres
+				for(int j =0; j < k; j++) {	
+					m.dimension ++; //dimension matrice
+					//System.out.println("Affichage 1:" +(m.in.get(Index.get(i-1)+j)).i);
+					element e1 = new element(m.dimension, (m.in.get(Index.get(i-1)+j)).i, 1.0); //Création nouveau lien
+					
+					m.in.add(e1); //Ajout nouveau lien
+					//System.out.println("Affichage 2:" +(m.in.get(Index.get(i-1)+j)).i);
+					m.in.get(Index.get(i-1)+j).j = m.dimension; //Modification du père pour pointer sur le nouveau site					
+					m.nbElement++; //Incrémentation nombre non nul				
+				}
+			}
+			else if (k == 1) {
+				m.dimension ++;
+				element e1 = new element(m.dimension, Index.get(i-1) , 1.0);
+				m.in.add(e1);
+				m.nbElement++;
+			}				
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package LastVersion;
+package readerUpgrade;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class Matrice {
 	public List<Integer> tableauIndiceColonneD() {
 		List<element> l = this.in;
 		element tmp = l.get(0); //premier elem
-		tmp.print();
+		//tmp.print();
 		List<Integer> res = new ArrayList<Integer>();
 		if(tmp.j != 1) {
 			for (int i=0; i < tmp.j;i++) {
@@ -61,11 +61,11 @@ public class Matrice {
 				//System.out.println("IndD : " +i);
 			}
 			if(l.get(i).j > tmp.j) { //remplir indiceD pour les colonnes vide (non connexe)
-				System.out.println(tmp.j +" "+ l.get(i).j);	
+				//System.out.println(tmp.j +" "+ l.get(i).j);	
 				int diff = l.get(i).j - tmp.j; //on ajoute diff fois l'indice de l'élément de début de gap
 
 				sum += diff-1;
-				System.out.println("sum : "+sum);
+				//System.out.println("sum : "+sum);
 				for (int k = 0; k < diff-1; k++) {
 					res.add(i);
 				}
